@@ -13,6 +13,7 @@ import time
 import uuid
 from aiohttp import web
 from render import DEFAULT,validate_scene,render
+from schedule import DEFAULT_SCHEDULE,validate_schedule,schedule_status
 
 def shape_kind(shape):
     if "kind" in shape:return shape["kind"]
@@ -23,22 +24,28 @@ class Studio:
     def __init__(self,directory):
         self.directory=Path(directory);self.directory.mkdir(parents=True,exist_ok=True)
         self.path=self.directory/"studio.json";self.scene=DEFAULT.copy();self.shapes={}
+        self.schedule=DEFAULT_SCHEDULE.copy()
         self.epoch=time.monotonic();self.sequence=0;self.frame=bytes(1200);self.devices={}
         if self.path.exists():
             state=json.loads(self.path.read_text())
             self.scene=validate_scene(state["scene"],DEFAULT);self.shapes=state["shapes"]
-    def save(self,scene=None,shapes=None):
+            self.schedule=validate_schedule(state.get("schedule",{}))
+    def save(self,scene=None,shapes=None,schedule=None):
         scene=self.scene if scene is None else scene
         shapes=self.shapes if shapes is None else shapes
+        schedule=self.schedule if schedule is None else schedule
         temp=self.path.with_suffix(".tmp")
-        temp.write_text(json.dumps(dict(scene=scene,shapes=shapes),ensure_ascii=False))
+        temp.write_text(json.dumps(dict(scene=scene,shapes=shapes,schedule=schedule),ensure_ascii=False))
         temp.replace(self.path)
-        self.scene=scene;self.shapes=shapes
+        self.scene=scene;self.shapes=shapes;self.schedule=schedule
+    def render_frame(self,elapsed,now=None):
+        if not schedule_status(self.schedule,now)["active"]:return bytes(1200)
+        return render(self.scene,elapsed,self.shapes)
     def metadata(self):
         return [dict(id=s["id"],name=s["name"],frames=len(s["frames"]),durationMs=s["durationMs"],kind=shape_kind(s)) for s in self.shapes.values()]
     def status(self):
         now=time.monotonic()
-        return dict(scene=self.scene,shapes=self.metadata(),sequence=self.sequence,
+        return dict(scene=self.scene,schedule=schedule_status(self.schedule),shapes=self.metadata(),sequence=self.sequence,
             devices=[dict(id=k,online=now-v["last"]<5,ageSeconds=round(now-v["last"],1),
                           received=v.get("received",0),framesSent=v.get("framesSent",0),requests=v["requests"]) for k,v in self.devices.items()])
 
@@ -89,6 +96,10 @@ def create_app(directory=None,user=None,password=None,token=None):
         c=validate_scene(await r.json(),studio.scene)
         if c["mode"]=="custom" and c["shapeId"] not in studio.shapes:raise ValueError("Wybierz zapisany kształt")
         studio.save(scene=c);studio.epoch=time.monotonic()
+        return web.json_response(studio.status())
+    async def update_schedule(r):
+        config=validate_schedule(await r.json(),studio.schedule)
+        studio.save(schedule=config)
         return web.json_response(studio.status())
     async def preview(r):return web.Response(body=studio.frame,content_type="application/octet-stream")
     async def save_shape(r):
@@ -165,6 +176,7 @@ def create_app(directory=None,user=None,password=None,token=None):
     app.router.add_get("/health",health);app.router.add_get("/",index)
     app.router.add_get("/static/{name}",asset)
     app.router.add_get("/api/state",state);app.router.add_post("/api/scene",update)
+    app.router.add_post("/api/schedule",update_schedule)
     app.router.add_get("/api/preview",preview)
     app.router.add_post("/api/shapes",save_shape);app.router.add_put("/api/shapes/{id}",save_shape)
     app.router.add_post("/api/shapes/{id}/play",play_shape)
@@ -176,7 +188,7 @@ def create_app(directory=None,user=None,password=None,token=None):
     async def generator():
         while True:
             start=time.monotonic()
-            studio.frame=render(studio.scene,start-studio.epoch,studio.shapes);studio.sequence+=1
+            studio.frame=studio.render_frame(start-studio.epoch);studio.sequence+=1
             await asyncio.sleep(max(.001,.05-(time.monotonic()-start)))
     async def lifecycle(app):
         task=asyncio.create_task(generator())

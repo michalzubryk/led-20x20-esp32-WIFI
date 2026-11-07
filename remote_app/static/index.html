@@ -1,7 +1,16 @@
 <!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#101621"><title>LED Studio · Pilot</title><link rel="stylesheet" href="/static/style.css"></head>
 <body><header><div><span class="eyebrow">TWOJA KURTYNA · 20 × 20</span><h1>LED Studio</h1></div><span id="device" class="badge">Łączenie…</span></header>
 <main><section class="monitor"><canvas id="preview" width="20" height="20" aria-label="Podgląd obrazu wysyłanego do ESP32"></canvas><div><span id="playing">Podgląd na żywo</span><button id="off" class="danger">■ Zgaś</button></div></section>
-<p class="hint">Podgląd pokazuje pełne kolory. Suwak jasności reguluje lampki.</p><nav aria-label="Sekcje"><button class="active" data-tab="play">▶ Efekty</button><button data-tab="draw">✎ Rysuj</button><button data-tab="library">▦ Moje kształty</button></nav>
+<p class="hint">Podgląd pokazuje pełne kolory. Suwak jasności reguluje lampki.</p><details id="schedulePanel"><summary>◷ Godziny świecenia</summary>
+<form id="scheduleForm">
+<label class="schedule-toggle"><input id="scheduleEnabled" type="checkbox"> Włącz codzienny harmonogram</label>
+<div class="row"><div><label for="scheduleOn">Włącz o</label><input id="scheduleOn" type="time" value="16:00" required></div><div><label for="scheduleOff">Wyłącz o</label><input id="scheduleOff" type="time" value="23:00" required></div></div>
+<label for="scheduleTimezone">Strefa czasowa</label><input id="scheduleTimezone" value="Europe/Warsaw" list="timezones" maxlength="80" required autocapitalize="off" spellcheck="false"><datalist id="timezones"><option value="Europe/Warsaw"><option value="Europe/London"><option value="Europe/Berlin"><option value="UTC"></datalist>
+<p id="scheduleStatus" class="hint" role="status" aria-live="polite">Odczyt harmonogramu…</p>
+<button id="saveSchedule" class="primary full" type="submit">Zapisz harmonogram</button>
+<p class="hint">Codziennie, również przez północ (np. 18:00–01:00). Wybierz obraz i naciśnij Play — poza godzinami będzie czekał na włączenie. „Zgaś” wyłącza ręcznie do kolejnego Play. Zmiana czasu letni/zimowy jest automatyczna.</p>
+<p class="hint">Działa w trybie Serwer zdalny, także po zamknięciu strony. Wymaga połączenia ESP32 z serwerem; lokalny generator awaryjny nie korzysta z tego harmonogramu.</p>
+</form></details><nav aria-label="Sekcje"><button class="active" data-tab="play">▶ Efekty</button><button data-tab="draw">✎ Rysuj</button><button data-tab="library">▦ Moje kształty</button></nav>
 <section id="play" class="tab"><h2>Co pokażemy?</h2><div class="effects" id="effects">
 <button data-mode="text" class="selected">Aa<span>Tekst</span></button><button data-mode="counter">123<span>Licznik</span></button><button data-mode="rainbow">🌈<span>Tęcza</span></button><button data-mode="bars">▰<span>Pasy</span></button><button data-mode="pulse">◉<span>Puls</span></button><button data-mode="bounce">▣<span>Kwadrat</span></button></div>
 <div id="textOptions"><label for="text">Tekst lub liczba</label><input id="text" value="HELLO 123" maxlength="100" placeholder="Napisz coś…"></div>

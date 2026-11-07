@@ -28,6 +28,14 @@ Lokalny panel pozwala ustawić kierunek (lewo/prawo/góra/dół/bez ruchu), kolo
 
 Studio zdalne dodaje rysowanie palcem, gumkę, cofanie, gotowe stemple, bibliotekę do 100 kształtów i animacje do 32 klatek. **Play wyświetla tylko wybrany motyw w pętli.** Pokaz różnych obrazków jest osobnym typem. Animację można zatrzymać na pierwszej klatce. Pakiet świąteczny zawiera 10 obrazów, pokaz oraz 4 animacje, np. choinkę z migającymi lampkami.
 
+## Godziny świecenia
+
+W panelu WWW rozwiń **„Godziny świecenia”**, włącz harmonogram i ustaw godzinę włączenia oraz wyłączenia. Domyślna strefa to `Europe/Warsaw`, ze zmianą czasu letniego/zimowego. Przedziały przez północ, np. 18:00–01:00, są obsługiwane.
+
+Harmonogram działa codziennie na serwerze, także po zamknięciu przeglądarki i restarcie aplikacji. Wybierz scenę i naciśnij Play; poza godzinami serwer wysyła czarne klatki. „Zgaś” pozostaje ręcznym wyłączeniem do kolejnego Play. Harmonogram dotyczy trybu **Serwer zdalny z aktywnym połączeniem** — lokalny generator awaryjny i USB/DDP są niezależne.
+
+![Godziny świecenia w panelu mobilnym](docs/screenshots/schedule.png)
+
 ## Zrzuty ekranu
 
 Poniższe ekrany pochodzą z lokalnej instalacji demonstracyjnej. Nie przedstawiają rzeczywistej instalacji ani połączonego sprzętu.

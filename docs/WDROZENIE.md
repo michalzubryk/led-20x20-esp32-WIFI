@@ -139,6 +139,21 @@ python3 remote_app/christmas/import_shapes.py --url https://led.example.com:1844
 
 Importer pomija nazwy istniejące już w bibliotece. Wbudowane grafiki są w repozytorium, więc nie trzeba pobierać ich ponownie. `prepare.py` odtwarza obrazy z OpenMoji (wymaga internetu i Pillow), a `animate.py` generuje animacje.
 
+### Codzienny harmonogram
+
+Na stronie serwera otwórz **Godziny świecenia**. Zaznacz **Włącz codzienny harmonogram**, ustaw **Włącz o** i **Wyłącz o**, wybierz strefę czasową (np. `Europe/Warsaw`) i naciśnij **Zapisz harmonogram**. Pola czasu korzystają z selektora telefonu. Wyświetlany zegar pochodzi z serwera, nie z telefonu. Serwer powinien mieć prawidłowo synchronizowany czas systemowy.
+
+- Przykład 16:00–23:00: lampki działają od 16:00 włącznie do 23:00 wyłącznie.
+- Przykład 18:00–01:00: świecą wieczorem i po północy do 01:00.
+- Identyczne godziny są odrzucane. Aby świecić całą dobę, wyłącz harmonogram.
+- Wybierz efekt / kształt i naciśnij Play. Poza przedziałem obraz czeka na porę włączenia; nie trzeba zostawiać przeglądarki otwartej.
+- „Zgaś” ma pierwszeństwo i wyłącza scenę do kolejnego Play. Zapisanie godzin samo nie zmienia wybranego obrazu ani stanu ręcznego wyłączenia.
+- Wyłączenie harmonogramu usuwa ograniczenie godzinowe; aktywna scena zaczyna świecić od razu.
+
+Godziny zapisują się w `studio.json` razem z biblioteką i są zachowane po restarcie. Zmiana czasu jest liczona według lokalnego zegara wybranej strefy: jesienna powtórzona godzina jest oceniana dwukrotnie, a pominięta godzina wiosenna nie występuje. Starsze instalacje po aktualizacji mają harmonogram wyłączony.
+
+Ta funkcja działa w trybie **Serwer zdalny** i nie wymaga aktualizacji firmware. ESP32 nadal potrzebuje zasilania i połączenia z serwerem. W razie jego utraty dotychczasowy lokalny generator awaryjny może się uruchomić niezależnie od harmonogramu. Harmonogram wygasza obraz; nie odcina elektrycznie zasilania LED. Tryby lokalny i USB/DDP nie korzystają z godzin serwera.
+
 ### GIF / USB / DDP
 
 W panelu ESP32 przełącz źródło na **Aplikacja USB / DDP**. Zainstaluj zależności nadajnika:

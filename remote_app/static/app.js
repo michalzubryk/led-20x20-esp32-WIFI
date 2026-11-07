@@ -18,10 +18,22 @@ document.querySelectorAll('[data-dir]').forEach(b=>b.onclick=()=>{direction=b.da
 for(const id of ['speed','brightness'])$(id).oninput=updateControls;
 function applyConfig(c){scene=c;mode=c.mode;direction=c.direction;for(const k of ['text','start','color','speed','brightness','scale','blinkMs'])$(k).value=c[k];$('blink').checked=c.blink;$('invert').checked=c.invert;$('animate').checked=c.animate!==false;updateControls();}
 function readScene(){const c={...scene,mode,direction,enabled:true};for(const k of ['text','color'])c[k]=$(k).value;for(const k of ['start','speed','brightness','scale','blinkMs'])c[k]=Number($(k).value);for(const k of ['blink','invert','animate'])c[k]=$(k).checked;return c;}
-function updatePlaying(state){const c=state.scene,s=state.shapes.find(s=>s.id===c.shapeId);$('playing').textContent=!c.enabled?'Wyłączone':c.mode==='custom'?(s?s.name:'Wybrany kształt')+(s&&s.frames>1?(c.animate?' · odtwarzanie':' · pierwsza klatka'):' · obraz stały'):c.mode==='text'?c.text:'Animacja: '+c.mode;}
-function changeScene(path,data){sceneQueue=sceneQueue.catch(()=>{}).then(async()=>{const state=await api(path,{method:'POST',body:JSON.stringify(data)});applyConfig(state.scene);updatePlaying(state);toast(state.scene.enabled?'Wyświetlanie uruchomione':'Lampki zgaszone');return state;});return sceneQueue;}
+function updatePlaying(state){const c=state.scene,s=state.shapes.find(s=>s.id===c.shapeId);$('playing').textContent=!c.enabled?'Wyłączone ręcznie':state.schedule&& !state.schedule.active?'Poza godzinami świecenia · czeka na '+state.schedule.on:c.mode==='custom'?(s?s.name:'Wybrany kształt')+(s&&s.frames>1?(c.animate?' · odtwarzanie':' · pierwsza klatka'):' · obraz stały'):c.mode==='text'?c.text:'Animacja: '+c.mode;}
+function changeScene(path,data){sceneQueue=sceneQueue.catch(()=>{}).then(async()=>{const state=await api(path,{method:'POST',body:JSON.stringify(data)});applyConfig(state.scene);updatePlaying(state);toast(!state.scene.enabled?'Lampki zgaszone':state.schedule&&!state.schedule.active?'Zapisano obraz · czeka na godzinę włączenia':'Wyświetlanie uruchomione');return state;});return sceneQueue;}
 function setScene(c){return changeScene('/api/scene',c);}
 function playShape(id){return changeScene('/api/shapes/'+encodeURIComponent(id)+'/play',{});}
+
+function showSchedule(config,fill=false){
+ if(!config)return;
+ if(fill){$('scheduleEnabled').checked=config.enabled;$('scheduleOn').value=config.on;$('scheduleOff').value=config.off;$('scheduleTimezone').value=config.timezone;}
+ const time=config.localTime.slice(11,19);
+ $('scheduleStatus').textContent=(config.enabled?'Codziennie '+config.on+'–'+config.off+' · '+(config.active?'godziny świecenia':'lampki czekają na włączenie'):'Harmonogram wyłączony')+' · zegar: '+time+' ('+config.timezone+')';
+}
+$('scheduleForm').onsubmit=async e=>{
+ e.preventDefault();const button=$('saveSchedule');button.disabled=true;
+ try{const s=await api('/api/schedule',{method:'POST',body:JSON.stringify({enabled:$('scheduleEnabled').checked,on:$('scheduleOn').value,off:$('scheduleOff').value,timezone:$('scheduleTimezone').value.trim()})});showSchedule(s.schedule,true);updatePlaying(s);toast('Harmonogram zapisany');}
+ catch(e){toast(e.message)}finally{button.disabled=false}
+};
 
 $('apply').onclick=()=>setScene(readScene()).catch(e=>toast(e.message));
 $('off').onclick=()=>setScene({enabled:false}).catch(e=>toast(e.message));
@@ -91,5 +103,5 @@ for(const [id,filter] of [['allShapes','all'],['christmasShapes','christmas'],['
 };
 setInterval(()=>{if(document.hidden||$('library').hidden)return;const t=performance.now();for(const item of thumbnails){if(item.canvas.isConnected)drawPixels(item.canvas,item.frames[Math.floor(t/item.duration)%item.frames.length]);}},100);
 async function preview(){try{const r=await fetch('/api/preview',{signal:AbortSignal.timeout(4000)});if(!r.ok)throw Error();const b=new Uint8Array(await r.arrayBuffer());if(b.length===1200)drawPixels($('preview'),Array.from(b),false,previewBrightness>0?255/previewBrightness:1);}catch{}setTimeout(preview,150)}
-async function status(){try{const s=await api('/api/state');previewBrightness=s.scene.brightness;const online=s.devices.filter(d=>d.online);$('device').textContent=online.length?'● ESP32 online':'○ ESP32 offline';$('device').classList.toggle('online',online.length>0);$('deviceDetails').textContent=s.devices.map(d=>d.id+': wysłano '+(d.framesSent||0)+' klatek').join(' · ')||'Czekam na ESP32. Wybierz tryb serwera na urządzeniu.';updatePlaying(s);}catch{$('device').textContent='Brak połączenia'}setTimeout(status,2000)}
-(async()=>{try{const s=await api('/api/state');applyConfig(s.scene);await library();drawEditor();preview();status()}catch(e){toast(e.message)}})();
+async function status(){try{const s=await api('/api/state');previewBrightness=s.scene.brightness;const online=s.devices.filter(d=>d.online);$('device').textContent=online.length?'● ESP32 online':'○ ESP32 offline';$('device').classList.toggle('online',online.length>0);$('deviceDetails').textContent=s.devices.map(d=>d.id+': wysłano '+(d.framesSent||0)+' klatek').join(' · ')||'Czekam na ESP32. Wybierz tryb serwera na urządzeniu.';updatePlaying(s);showSchedule(s.schedule);}catch{$('device').textContent='Brak połączenia'}setTimeout(status,2000)}
+(async()=>{try{const s=await api('/api/state');applyConfig(s.scene);showSchedule(s.schedule,true);await library();drawEditor();preview();status()}catch(e){toast(e.message)}})();
