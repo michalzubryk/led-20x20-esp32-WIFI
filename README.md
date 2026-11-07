@@ -51,6 +51,34 @@ W opisanym podłączeniu **lampki są zasilane z własnego USB przez oryginalną
 
 GPIO18 jest linią danych, nie zasilaniem LED. Użyj zasilacza dobranego do napięcia i poboru swojej matrycy, wspólnej masy i w razie potrzeby konwertera poziomów. Zacznij od niskiej jasności (domyślnie 24/255). Nie zasilaj 400 LED z wyjścia 3V3 ESP32.
 
+## Schemat podłączenia do oryginalnego sterownika lampek
+
+Lampki pozostają zasilane ze swojego USB przez oryginalną płytkę. ESP32 jest zasilane osobnym USB. Łączymy je z lampkami tylko przez **DATA i wspólną masę GND**.
+
+```mermaid
+flowchart TB
+  USBLED["USB lampek"] --> BOARD["Oryginalna płytka sterownika<br/>pozostawiony tor zasilania"]
+  BOARD -->|"V+"| LED["Lampki 20×20 · 400 LED"]
+  BOARD ---|"GND"| GND["Wspólna masa"]
+  GND --- LED
+  USBESP["USB komputera / zasilacza"] --> ESP["ESP32"]
+  ESP ---|"GND"| GND
+  ESP -->|"GPIO18 → DATA"| LED
+  OLD["DATA oryginalnego sterownika"] -.-> CUT["ODŁĄCZONE od lampek"]
+```
+
+| Połączenie | Sposób podłączenia |
+|---|---|
+| Zasilanie lampek V+ i GND | Pozostaje na oryginalnej płytce zasilanej z USB lampek |
+| GPIO18 ESP32 | Do przewodu DATA prowadzącego do pierwszej lampki |
+| GND ESP32 | Do GND lampek / oryginalnej płytki |
+| USB ESP32 | Osobne zasilanie ESP32 |
+| 3V3 i 5V/VIN ESP32 | Nie podłączamy do V+ lampek |
+
+**Przed podłączeniem GPIO18 odłącz DATA oryginalnego sterownika od przewodu prowadzącego do lampek.** Nie łącz dwóch wyjść DATA równolegle. Prace wykonuj przy odłączonych obu USB. Jeżeli poziom sygnału wymaga dopasowania, umieść konwerter poziomów w torze GPIO18 → DATA; opcjonalny rezystor szeregowy nie zastępuje konwertera.
+
+[Pełna instrukcja podłączenia i pierwszego testu](docs/WDROZENIE.md#połączenia--zasilanie-z-usb-lampek).
+
 ## Struktura i licencje
 
 - `esp32_led_standalone/` — firmware Arduino, lokalne WWW, HTTPS, OTA, font.
