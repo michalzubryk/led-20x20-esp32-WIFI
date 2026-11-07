@@ -4,15 +4,44 @@ W przykładach `led.example.com` oznacza **Twoją domenę**, `ADRES_ESP` adres p
 
 ## 1. Sprzęt i firmware
 
-### Połączenia
+### Połączenia — zasilanie z USB lampek
 
-| ESP32 | Matryca / kurtyna |
+W tym wariancie **lampki zachowują oryginalne zasilanie ze swojego USB**, przez płytkę sterownika. ESP32 ma własne zasilanie przez USB (komputer lub zasilacz USB). Między ESP32 a lampkami podłączamy tylko **DATA i GND**.
+
+```mermaid
+flowchart TB
+  USBLED["USB lampek · oryginalne zasilanie"] --> POWER["Płytka oryginalnego sterownika<br/>pozostawiony tor zasilania"]
+  POWER -->|"V+ · pozostaje podłączone"| LED["Łańcuch 400 LED / 20×20<br/>wejście pierwszej lampki"]
+  POWER ---|"GND · pozostaje podłączone"| GND["Wspólna masa GND"]
+  GND --- LED
+  USBESP["USB komputera lub zasilacza"] --> ESP["ESP32"]
+  ESP ---|"GND"| GND
+  ESP -->|"GPIO18 → DATA lampek"| LED
+  OLD["Wyjście DATA oryginalnego sterownika"] -.-> CUT["ODŁĄCZONE od DATA lampek"]
+```
+
+Schemat pokazuje połączenia funkcjonalne; ewentualny rezystor i konwerter poziomów umieść w torze DATA opisanym poniżej.
+
+| Przewód / punkt | Co podłączyć |
 |---|---|
-| GPIO18 | Wejście DATA pierwszego LED (przez konwerter poziomów, jeśli wymagany) |
-| GND | GND matrycy i zasilacza |
-| USB | Zasilanie ESP32 / programowanie |
+| V+ lampek | Pozostaje na oryginalnej płytce, zasilanej z USB lampek |
+| GND lampek | Pozostaje na oryginalnej płytce; do tej samej masy dołącz GND ESP32 |
+| DATA prowadzące do lampek | Odłącz od wyjścia oryginalnego sterownika i podłącz do GPIO18 ESP32 |
+| USB ESP32 | Osobne zasilanie ESP32 / programowanie |
+| 3V3 i 5V/VIN ESP32 | Nie łącz z V+ lampek w tym wariancie |
 
-Zasilanie LED prowadź z odpowiedniego zasilacza, zgodnie z parametrami lampek. Nie łącz dwóch wyjść zasilaczy ze sobą. Rezystor szeregowy w DATA, typowo 220–470 Ω przy nadajniku, może pomóc ograniczyć odbicia; nie zastępuje konwersji poziomów. Nie podawaj 5 V na GPIO ESP32. Numer GPIO18 nie oznacza osiemnastej fizycznej nóżki modułu.
+**Nie łącz równolegle dwóch wyjść DATA.** Samo dolutowanie GPIO18 do działającego wyjścia oryginalnego sterownika może powodować konflikt. Odłącz przewód DATA od płytki lub przerwij wyłącznie jego ścieżkę od oryginalnego procesora. ESP32 ma sterować stroną prowadzącą do lampek. Oryginalny procesor może pozostać na płytce, ale jego DATA musi być odseparowane.
+
+1. Odłącz oba USB przed zmianą przewodów.
+2. Zidentyfikuj V+, GND i DATA na płytce; nie zakładaj funkcji na podstawie samego koloru przewodu.
+3. Pozostaw V+ i GND lampek podłączone do oryginalnego toru zasilania.
+4. Odłącz oryginalne DATA od lampek i podłącz wejście DATA lampek do GPIO18 ESP32.
+5. Połącz GND ESP32 z GND lampek / płytki sterownika.
+6. Podłącz USB lampek i USB ESP32. Pierwszy test wykonaj z niską jasnością, np. 24/255.
+
+Rezystor szeregowy w DATA, typowo 220–470 Ω przy nadajniku, może pomóc ograniczyć odbicia; nie zastępuje konwersji poziomów. Jeśli wejście DATA lampek wymaga wyższego poziomu niż 3,3 V, zastosuj odpowiedni konwerter poziomów pomiędzy GPIO18 a DATA. Nie podawaj 5 V na GPIO ESP32. Numer GPIO18 nie oznacza osiemnastej fizycznej nóżki modułu.
+
+Zasilacz USB i oryginalny tor zasilania muszą wystarczać dla poboru lampek. Nie zasilaj 400 LED z wyjścia 3V3 ESP32 ani nie łącz ze sobą dodatnich wyjść dwóch zasilaczy. Powyższy schemat zakłada pozostawienie oryginalnego toru zasilania, bez wymuszania innego napięcia na wyjściu płytki.
 
 ### Konfiguracja
 

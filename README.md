@@ -47,6 +47,8 @@ Poniższe ekrany pochodzą z lokalnej instalacji demonstracyjnej. Nie przedstawi
 
 Testowano klasyczne ESP32 (ESP32-D0WD, 4 MB Flash) i jedną kurtynę 20×20. Model układów LED nie został jednoznacznie ustalony. Firmware wysyła RGB24: bit 0 = 250 ns HIGH + 750 ns LOW, bit 1 = 750 ns HIGH + 250 ns LOW, przerwa 600 µs. **Nie jest to deklaracja zgodności ze wszystkimi WS281x.** Dla innej matrycy sprawdź napięcie, timing i kolejność kanałów.
 
+W opisanym podłączeniu **lampki są zasilane z własnego USB przez oryginalną płytkę**, a ESP32 z osobnego USB. Do ESP32 podłączamy DATA lampek (GPIO18) i wspólną masę GND; wyjście DATA oryginalnego sterownika odłączamy. Zobacz [schemat i kolejność podłączenia](docs/WDROZENIE.md#połączenia--zasilanie-z-usb-lampek).
+
 GPIO18 jest linią danych, nie zasilaniem LED. Użyj zasilacza dobranego do napięcia i poboru swojej matrycy, wspólnej masy i w razie potrzeby konwertera poziomów. Zacznij od niskiej jasności (domyślnie 24/255). Nie zasilaj 400 LED z wyjścia 3V3 ESP32.
 
 ## Struktura i licencje
