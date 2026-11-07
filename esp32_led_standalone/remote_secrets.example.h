@@ -1,0 +1,6 @@
+#pragma once
+#define REMOTE_HOST "led.example.com"
+#define REMOTE_PORT 18443
+#define DEVICE_TOKEN "REPLACE_WITH_SERVER_DEVICE_TOKEN"
+#define OTA_USER "admin"
+#define OTA_PASSWORD "REPLACE_WITH_UNIQUE_OTA_PASSWORD"

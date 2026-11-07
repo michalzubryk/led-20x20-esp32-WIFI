@@ -1,0 +1,62 @@
+[
+  {
+    "code": "1F384",
+    "name": "Choinka",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F384.png",
+    "sha256": "1ab460aac9a23c17ad5a6fd5ce087986bebcb0f031ac69f8e328d4429edd130a"
+  },
+  {
+    "code": "1F385",
+    "name": "Mikołaj",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F385.png",
+    "sha256": "a3ae2764bed38a77be037a3c5b65a00c30d043b35dd98016bcf398051b6b99b4"
+  },
+  {
+    "code": "1F381",
+    "name": "Prezent",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F381.png",
+    "sha256": "b17186b02349f3b5a6eece0ead16a28a726506417d36d2cd97501ba86efd99ee"
+  },
+  {
+    "code": "26C4",
+    "name": "Bałwan",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/26C4.png",
+    "sha256": "a34f11141394322283a608556765562f45cf22e96ef416042d95a441c91880b1"
+  },
+  {
+    "code": "2744",
+    "name": "Śnieżynka",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/2744.png",
+    "sha256": "3c77229d03a1aa63138bb34bfda8bd9ffeac7fe726279c879d0bf6f69a6d2ef4"
+  },
+  {
+    "code": "1F514",
+    "name": "Dzwonek",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F514.png",
+    "sha256": "255b0e114c6b0278fbe861da4343ebf7befa7f9bdc1da68a23b1cd35a5fd91f4"
+  },
+  {
+    "code": "1F31F",
+    "name": "Gwiazdka",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F31F.png",
+    "sha256": "a2cdb5f8e4ee3e453fb3956f435ab9b59c33386318f2faa950e8980bffcd386f"
+  },
+  {
+    "code": "1F56F",
+    "name": "Świeca",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F56F.png",
+    "sha256": "7af38cb8245172c73e4e4d3afcd1335e30205c176905cf1f86dd8f6f74821249"
+  },
+  {
+    "code": "1F98C",
+    "name": "Jelonek",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F98C.png",
+    "sha256": "1e8f0244202a77dea4ffd4754f746dda4938f81e70f80bf3d66429cbd45454e4"
+  },
+  {
+    "code": "1F9E6",
+    "name": "Skarpety",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F9E6.png",
+    "sha256": "c119364d7e8ee3446477c77b8985bbf3f991f9c928cc6ee4730f7c87d64d57a2"
+  }
+]

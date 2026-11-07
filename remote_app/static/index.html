@@ -1,0 +1,35 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#101621"><title>LED Studio · Pilot</title><link rel="stylesheet" href="/static/style.css"></head>
+<body><header><div><span class="eyebrow">TWOJA KURTYNA · 20 × 20</span><h1>LED Studio</h1></div><span id="device" class="badge">Łączenie…</span></header>
+<main><section class="monitor"><canvas id="preview" width="20" height="20" aria-label="Podgląd obrazu wysyłanego do ESP32"></canvas><div><span id="playing">Podgląd na żywo</span><button id="off" class="danger">■ Zgaś</button></div></section>
+<p class="hint">Podgląd pokazuje pełne kolory. Suwak jasności reguluje lampki.</p><nav aria-label="Sekcje"><button class="active" data-tab="play">▶ Efekty</button><button data-tab="draw">✎ Rysuj</button><button data-tab="library">▦ Moje kształty</button></nav>
+<section id="play" class="tab"><h2>Co pokażemy?</h2><div class="effects" id="effects">
+<button data-mode="text" class="selected">Aa<span>Tekst</span></button><button data-mode="counter">123<span>Licznik</span></button><button data-mode="rainbow">🌈<span>Tęcza</span></button><button data-mode="bars">▰<span>Pasy</span></button><button data-mode="pulse">◉<span>Puls</span></button><button data-mode="bounce">▣<span>Kwadrat</span></button></div>
+<div id="textOptions"><label for="text">Tekst lub liczba</label><input id="text" value="HELLO 123" maxlength="100" placeholder="Napisz coś…"></div>
+<div id="counterOptions" hidden><label for="start">Zacznij liczyć od</label><input id="start" type="number" inputmode="numeric" min="0" max="999999" value="0"></div>
+<div class="row"><div><label for="color">Kolor efektu</label><input id="color" type="color" value="#00ccff"></div><div><label for="scale">Wielkość tekstu</label><select id="scale"><option value="1">Mały · 10 px</option><option value="2">Duży · 20 px</option></select></div></div>
+<div class="swatches" id="effectSwatches" aria-label="Gotowe kolory"></div>
+<label>Przesuwanie</label><div class="directions" id="directions"><button data-dir="left" aria-label="W lewo">←</button><button data-dir="right" aria-label="W prawo">→</button><button data-dir="up" aria-label="W górę">↑</button><button data-dir="down" aria-label="W dół">↓</button><button data-dir="none" aria-label="Bez ruchu">●</button></div>
+<label for="speed">Tempo <output id="speedOut"></output></label><input id="speed" type="range" min="1" max="40" value="10">
+<label for="brightness">Jasność <output id="brightnessOut"></output></label><input id="brightness" type="range" min="0" max="255" value="24">
+<div class="toggles"><label><input id="blink" type="checkbox"> Miganie</label><label><input id="invert" type="checkbox"> Negatyw</label></div>
+<div id="animationOptions" hidden><label><input id="animate" type="checkbox" checked> Odtwarzaj animację wybranego motywu</label><p class="hint">Wyłącz, aby zatrzymać na pierwszej klatce. Nie zmienia to motywu na inny.</p></div>
+<label for="blinkMs">Tempo migania</label><select id="blinkMs"><option value="150">Szybkie</option><option value="500" selected>Średnie</option><option value="1000">Wolne</option><option value="2000">Bardzo wolne</option></select>
+<button id="apply" class="primary full">▶ Pokaż na lampkach</button><p class="hint">Wybrany własny kształt również korzysta z kierunku, jasności i efektów. Zmiany zatwierdź przyciskiem.</p></section>
+<section id="draw" class="tab" hidden><h2>Narysuj palcem</h2><p class="hint">Dotknij kratki lub przeciągnij. Możesz też zacząć od gotowego kształtu.</p>
+<canvas id="editor" width="400" height="400" aria-label="Dotykowy edytor pikseli 20 na 20" tabindex="0"></canvas>
+<div class="toolbar"><input id="paintColor" type="color" value="#00ccff" aria-label="Kolor pędzla"><button id="brush" class="selected">✎ Pędzel</button><button id="eraser">□ Gumka</button><button id="undo">↶ Cofnij</button></div>
+<div class="swatches" id="paintSwatches" aria-label="Kolory pędzla"></div>
+<div class="stamps"><button data-stamp="heart">♥ Serce</button><button data-stamp="circle">○ Koło</button><button data-stamp="star">★ Gwiazda</button><button data-stamp="smile">☺ Uśmiech</button><button data-stamp="arrow">→ Strzałka</button><button id="clear">Wyczyść</button></div>
+<div class="framebar"><button id="prevFrame" aria-label="Poprzednia klatka">‹</button><span id="frameLabel">Klatka 1 / 1</span><button id="nextFrame" aria-label="Następna klatka">›</button></div>
+<div class="toolbar"><button id="addFrame">＋ Klatka</button><button id="copyFrame">⧉ Kopiuj</button><button id="removeFrame">Usuń klatkę</button></div>
+<label for="durationMs">Czas jednej klatki</label><select id="durationMs"><option value="100">100 ms · szybko</option><option value="200" selected>200 ms</option><option value="500">500 ms</option><option value="1000">1 sekunda</option><option value="2000">2 sekundy</option></select>
+<label><input id="shapeSlideshow" type="checkbox"> To pokaz różnych obrazków</label><p class="hint">Dla migających lampek lub ruchu w obrębie jednej grafiki pozostaw wyłączone.</p>
+<label for="shapeName">Nazwa rysunku / animacji</label><input id="shapeName" maxlength="60" placeholder="Np. Moje serce">
+<button id="saveShape" class="primary full">Zapisz w moich kształtach</button><button id="newShape" class="full">Nowy rysunek</button></section>
+<section id="library" class="tab" hidden><h2>Moje kształty</h2><p class="hint">Dotknij ▶, żeby pokazać rysunek. ✎ otwiera edytor. Wybrany motyw gra w pętli, dopóki nie wybierzesz innego.</p><div class="toolbar" aria-label="Filtr kształtów"><button id="allShapes" class="selected">Wszystkie</button><button id="christmasShapes">🎄 Boże Narodzenie</button><button id="animatedShapes">✨ Animowane</button></div><div id="shapes" class="library"></div><details id="slideshowSection"><summary>Pokazy różnych obrazków — zmieniają motywy</summary><div id="slideshows" class="library"></div></details><button id="goDraw" class="primary full">＋ Dodaj kształt</button></section>
+<details><summary>ESP32 i aktualizacje</summary><p>Na lokalnej stronie ESP32 wybierz <b>Serwer zdalny</b>. Urządzenie samo łączy się z tym serwerem. Możesz zamknąć tę stronę.</p><p id="deviceDetails"></p><a class="button" href="/firmware/led400.bin">Pobierz firmware do OTA</a><p class="hint">Możesz też uruchomić „Aktualizuj z serwera” w lokalnym panelu ESP32. Panel aktualizacji wymaga logowania.</p></details>
+</main><div id="toast" role="status" aria-live="polite"></div><footer>LED Studio · działa na Twoim serwerze
+<p>Grafiki świąteczne: <a href="https://openmoji.org/" target="_blank" rel="noopener">OpenMoji</a>,
+<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.
+Dostosowane do 20×20 LED: kadrowanie, skalowanie, czarne tło; śnieżynka w bieli.
+Adaptacje i pokaz świąteczny: CC BY-SA 4.0.</p></footer><script src="/static/app.js"></script></body></html>

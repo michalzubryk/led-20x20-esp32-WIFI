@@ -1,0 +1,30 @@
+services:
+  led400:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: "18443"
+      CERT_FILE: /certs/fullchain.pem
+      KEY_FILE: /certs/privkey.pem
+    ports:
+      - "${HTTPS_PORT:-18443}:18443"
+    volumes:
+      - studio-data:/data
+      - ./releases:/firmware:ro
+      - ./certs:/certs:ro
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+volumes:
+  studio-data:

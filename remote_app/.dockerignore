@@ -1,0 +1,8 @@
+.env
+private
+data
+certs
+releases
+__pycache__
+tests
+christmas
