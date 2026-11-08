@@ -83,7 +83,7 @@ async function library(){
  const generation=++libraryGeneration;const state=await api('/api/state');if(generation!==libraryGeneration)return;
  shapes=state.shapes;thumbnails=[];const box=$('shapes'),shows=$('slideshows');box.replaceChildren();shows.replaceChildren();
  if(!shapes.length){const p=document.createElement('p');p.className='hint';p.textContent='Tu pojawią się Twoje rysunki. Zacznij od serca lub narysuj coś palcem.';box.append(p);return;}
- for(const meta of shapes.filter(s=>libraryFilter==='all'||(libraryFilter==='christmas'?s.name.startsWith('Święta · '):s.kind==='animation'))){const s=await api('/api/shapes/'+meta.id);if(generation!==libraryGeneration)return;
+ for(const meta of shapes.filter(s=>libraryFilter==='all'||(libraryFilter==='christmas'?s.name.startsWith('Święta · '):libraryFilter==='halloween'?s.name.startsWith('Halloween · '):s.kind==='animation'))){const s=await api('/api/shapes/'+meta.id);if(generation!==libraryGeneration)return;
  const card=document.createElement('article');card.className='shape';card.dataset.shapeId=s.id;card.dataset.kind=s.kind;
  const canvas=document.createElement('canvas');canvas.width=canvas.height=20;drawPixels(canvas,s.frames[0]);
  if(s.kind==='animation')thumbnails.push({canvas,frames:s.frames,duration:s.durationMs});
@@ -97,8 +97,8 @@ async function library(){
  card.append(canvas,title,small,actions);(s.kind==='slideshow'?shows:box).append(card);
  }
 }
-for(const [id,filter] of [['allShapes','all'],['christmasShapes','christmas'],['animatedShapes','animated']])$(id).onclick=()=>{
- libraryFilter=filter;$('allShapes').classList.toggle('selected',filter==='all');$('christmasShapes').classList.toggle('selected',filter==='christmas');$('animatedShapes').classList.toggle('selected',filter==='animated');
+for(const [id,filter] of [['allShapes','all'],['christmasShapes','christmas'],['halloweenShapes','halloween'],['animatedShapes','animated']])$(id).onclick=()=>{
+ libraryFilter=filter;$('allShapes').classList.toggle('selected',filter==='all');$('christmasShapes').classList.toggle('selected',filter==='christmas');$('animatedShapes').classList.toggle('selected',filter==='animated');$('halloweenShapes').classList.toggle('selected',filter==='halloween');
  library().catch(e=>toast(e.message));
 };
 setInterval(()=>{if(document.hidden||$('library').hidden)return;const t=performance.now();for(const item of thumbnails){if(item.canvas.isConnected)drawPixels(item.canvas,item.frames[Math.floor(t/item.duration)%item.frames.length]);}},100);

@@ -139,6 +139,14 @@ python3 remote_app/christmas/import_shapes.py --url https://led.example.com:1844
 
 Importer pomija nazwy istniejące już w bibliotece. Wbudowane grafiki są w repozytorium, więc nie trzeba pobierać ich ponownie. `prepare.py` odtwarza obrazy z OpenMoji (wymaga internetu i Pillow), a `animate.py` generuje animacje.
 
+### Halloween i animowana świeczka
+
+```bash
+python3 remote_app/halloween/import_shapes.py --url https://led.example.com:18443
+```
+
+Importer zapyta o login i hasło. Dodaje 7 obrazów i 3 animacje bez zmiany aktualnej sceny i harmonogramu; ponowne uruchomienie pomija istniejące nazwy. Na telefonie wybierz **Moje kształty → Halloween**, a następnie Play przy motywie. Animowana świeczka nazywa się **Halloween · Świeczka — migoczący płomień**. Możesz zmienić jasność lub zatrzymać animację na pierwszej klatce.
+
 ### Codzienny harmonogram
 
 Na stronie serwera otwórz **Godziny świecenia**. Zaznacz **Włącz codzienny harmonogram**, ustaw **Włącz o** i **Wyłącz o**, wybierz strefę czasową (np. `Europe/Warsaw`) i naciśnij **Zapisz harmonogram**. Pola czasu korzystają z selektora telefonu. Wyświetlany zegar pochodzi z serwera, nie z telefonu. Serwer powinien mieć prawidłowo synchronizowany czas systemowy.

@@ -1,0 +1,44 @@
+[
+  {
+    "code": "1F383",
+    "name": "Dynia",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F383.png",
+    "sha256": "154071c75a33f574b47c4c1a33302f24221ba5092bfcd972e6a3a804791fc342"
+  },
+  {
+    "code": "1F47B",
+    "name": "Duch",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F47B.png",
+    "sha256": "737d361de8487149a0207c06b8ae844146ed0e26d52028bd4e61fe055fc4bb82"
+  },
+  {
+    "code": "1F987",
+    "name": "Nietoperz",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F987.png",
+    "sha256": "2692a9d5fb853adf8622ddac77e150cf4f48325e240b39a339708f14f8844b6f"
+  },
+  {
+    "code": "1F480",
+    "name": "Czaszka",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F480.png",
+    "sha256": "618ff683857e6f8c4db8765686abc8c87f2bf682206c27b9f52ce1ae89703487"
+  },
+  {
+    "code": "1F577",
+    "name": "Pająk",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F577.png",
+    "sha256": "2296a971a1a8797e6a0ce41616c621b95c6a7600c088141c15c97e716fdc30e1"
+  },
+  {
+    "code": "1F578",
+    "name": "Pajęczyna",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F578.png",
+    "sha256": "c88a44e50408c0e5a2a2bec43f1c5d6005d0749e5b0846bafa0553b5f0a64cf9"
+  },
+  {
+    "code": "1F56F",
+    "name": "Świeczka",
+    "source": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F56F.png",
+    "sha256": "7af38cb8245172c73e4e4d3afcd1335e30205c176905cf1f86dd8f6f74821249"
+  }
+]

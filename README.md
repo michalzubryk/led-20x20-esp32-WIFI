@@ -28,6 +28,16 @@ Lokalny panel pozwala ustawić kierunek (lewo/prawo/góra/dół/bez ruchu), kolo
 
 Studio zdalne dodaje rysowanie palcem, gumkę, cofanie, gotowe stemple, bibliotekę do 100 kształtów i animacje do 32 klatek. **Play wyświetla tylko wybrany motyw w pętli.** Pokaz różnych obrazków jest osobnym typem. Animację można zatrzymać na pierwszej klatce. Pakiet świąteczny zawiera 10 obrazów, pokaz oraz 4 animacje, np. choinkę z migającymi lampkami.
 
+## Halloween
+
+Pakiet zawiera **7 obrazów i 3 animacje**: dynię, ducha, nietoperza, czaszkę, pająka, pajęczynę i świeczkę, a także świecącą dynię, lewitującego ducha oraz świeczkę z migoczącym płomieniem. Po imporcie wybierz **Moje kształty → Halloween** lub **Animowane**.
+
+[Podgląd, import i źródła grafik Halloween](remote_app/halloween/README.md). Kształt pozostaje wybrany; animacje nie przechodzą samoczynnie do innych obrazków.
+
+## Film na 20×20 — możliwości
+
+Możliwe jest przekształcenie AVI/MP4 w klatki RGB 20×20. Zobacz [demonstrację konwersji, animowany podgląd i ograniczenia](docs/WIDEO.md). Przykład sprawdzono na komputerze; import filmów w panelu WWW pozostaje funkcją do implementacji.
+
 ## Godziny świecenia
 
 W panelu WWW rozwiń **„Godziny świecenia”**, włącz harmonogram i ustaw godzinę włączenia oraz wyłączenia. Domyślna strefa to `Europe/Warsaw`, ze zmianą czasu letniego/zimowego. Przedziały przez północ, np. 18:00–01:00, są obsługiwane.
@@ -95,4 +105,4 @@ flowchart TB
 - `esp32_led_stream/stream.py` — nadajnik USB/DDP i GIF.
 - `docs/` — wdrożenie, API i zrzuty ekranu.
 
-Własny kod projektu: [MIT](LICENSE). Grafiki OpenMoji i ich przetworzone wersje: **CC BY-SA 4.0**, autorzy i źródła w [licencji grafik](remote_app/christmas/LICENSE.txt) i `sources.json`. Font DejaVu ma osobne warunki w `FONT_LICENSE.txt` w obu katalogach aplikacji. Licencje bibliotek i Arduino ESP32 pozostają odrębne.
+Własny kod projektu: [MIT](LICENSE). Grafiki OpenMoji (Boże Narodzenie i Halloween) i ich przetworzone wersje: **CC BY-SA 4.0**, autorzy i źródła w [licencji grafik](remote_app/christmas/LICENSE.txt) i `sources.json`. Licencję przykładowego filmu i autora podano w [opisie demonstracji](docs/WIDEO.md). Font DejaVu ma osobne warunki w `FONT_LICENSE.txt` w obu katalogach aplikacji. Licencje bibliotek i Arduino ESP32 pozostają odrębne.
