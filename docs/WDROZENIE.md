@@ -139,6 +139,10 @@ python3 remote_app/christmas/import_shapes.py --url https://led.example.com:1844
 
 Importer pomija nazwy istniejące już w bibliotece. Wbudowane grafiki są w repozytorium, więc nie trzeba pobierać ich ponownie. `prepare.py` odtwarza obrazy z OpenMoji (wymaga internetu i Pillow), a `animate.py` generuje animacje.
 
+### Gry: Arkanoid i Tetris
+
+Po aktualizacji aplikacji Docker otwórz **🎮 Gry**, wybierz grę i użyj przycisków na telefonie lub klawiatury. ESP32 pozostaje w trybie **Serwer zdalny** i nie wymaga nowego firmware. Po zakończeniu wraca poprzednia scena. [Pełna instrukcja gier](GRY.md) opisuje sterowanie i zachowanie harmonogramu.
+
 ### Halloween i animowana świeczka
 
 ```bash

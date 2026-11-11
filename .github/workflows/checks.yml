@@ -10,5 +10,5 @@ jobs:
           python-version: '3.12'
       - run: pip install -r remote_app/requirements.txt
       - run: python -m unittest discover -s remote_app/tests -v
-      - run: node --check remote_app/static/app.js
+      - run: node --check remote_app/static/app.js && node --check remote_app/static/games.js
       - run: python esp32_led_standalone/prepare_assets.py && git diff --exit-code

@@ -28,6 +28,12 @@ Lokalny panel pozwala ustawić kierunek (lewo/prawo/góra/dół/bez ruchu), kolo
 
 Studio zdalne dodaje rysowanie palcem, gumkę, cofanie, gotowe stemple, bibliotekę do 100 kształtów i animacje do 32 klatek. **Play wyświetla tylko wybrany motyw w pętli.** Pokaz różnych obrazków jest osobnym typem. Animację można zatrzymać na pierwszej klatce. Pakiet świąteczny zawiera 10 obrazów, pokaz oraz 4 animacje, np. choinkę z migającymi lampkami.
 
+## Gry na lampkach
+
+W zakładce **🎮 Gry** można uruchomić **Arkanoida** lub **Tetrisa** i grać przyciskami dotykowymi albo klawiaturą. Plansza jest wysyłana na LED-y jako klatki 20×20. Są pauza, jasność gry, wynik, życia oraz automatyczna pauza po utracie sterowania. Zakończenie przywraca poprzednią animację. Wymagany tryb ESP32: **Serwer zdalny**; bez aktualizacji firmware.
+
+[Instrukcja, sterowanie, zrzuty ekranu i ograniczenia](docs/GRY.md). Gra jest wspólna dla danej instancji serwera, respektuje harmonogram i nie zapisuje rozgrywki po restarcie.
+
 ## Halloween
 
 Pakiet zawiera **7 obrazów i 3 animacje**: dynię, ducha, nietoperza, czaszkę, pająka, pajęczynę i świeczkę, a także świecącą dynię, lewitującego ducha oraz świeczkę z migoczącym płomieniem. Po imporcie wybierz **Moje kształty → Halloween** lub **Animowane**.

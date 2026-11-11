@@ -3,3 +3,7 @@
 footer a{color:var(--accent)}.library{margin-top:16px}
 
 .schedule-toggle{display:flex;align-items:center;gap:10px}#schedulePanel input[type=time]{min-width:0}#scheduleStatus{min-height:42px}
+
+.game-start,.game-actions{display:flex;gap:8px;flex-wrap:wrap}.game-start button,.game-actions button{flex:1}.game-start button{border-color:var(--accent)}#gamePreview{display:block;width:min(100%,260px);aspect-ratio:1;background:black;image-rendering:pixelated;margin:12px auto}#gameStatus{min-height:48px;line-height:1.5;font-size:14px}.game-pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.game-pad button{min-height:60px;padding:8px;touch-action:none;user-select:none;-webkit-user-select:none}.game-pad .drop{grid-column:span 2}#paddle{touch-action:none;height:54px}#games h2{margin-bottom:10px}nav button{min-width:0}#gameBrightnessOut{font-size:14px}
+
+body.gaming{padding-top:8px}body.gaming header{margin:4px 0 8px}body.gaming h1{font-size:21px}body.gaming .eyebrow,body.gaming main>.hint,body.gaming .game-intro{display:none}body.gaming nav{margin:8px 0}body.gaming #games{padding:12px}body.gaming #gamePreview{width:min(100%,200px);margin:8px auto}body.gaming #gameStatus{min-height:40px;margin:8px 0}body.gaming #games h2{font-size:18px}.game-help{padding:10px 12px;margin-top:8px;font-size:13px}.game-help summary{min-height:24px}body.gaming .game-actions button{padding:8px;font-size:13px}body.gaming #paddle{height:44px}body.gaming #games label{margin-top:10px}

@@ -2,7 +2,7 @@ FROM python:3.12-slim
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY app.py render.py schedule.py font.json FONT_LICENSE.txt ./
+COPY app.py render.py schedule.py games.py font.json FONT_LICENSE.txt ./
 COPY static ./static
 ENV PYTHONUNBUFFERED=1 DATA_DIR=/data FIRMWARE_DIR=/firmware
 EXPOSE 18443

@@ -14,6 +14,7 @@ import uuid
 from aiohttp import web
 from render import DEFAULT,validate_scene,render
 from schedule import DEFAULT_SCHEDULE,validate_schedule,schedule_status
+from games import GameSession
 
 def shape_kind(shape):
     if "kind" in shape:return shape["kind"]
@@ -24,7 +25,7 @@ class Studio:
     def __init__(self,directory):
         self.directory=Path(directory);self.directory.mkdir(parents=True,exist_ok=True)
         self.path=self.directory/"studio.json";self.scene=DEFAULT.copy();self.shapes={}
-        self.schedule=DEFAULT_SCHEDULE.copy()
+        self.schedule=DEFAULT_SCHEDULE.copy();self.game=None
         self.epoch=time.monotonic();self.sequence=0;self.frame=bytes(1200);self.devices={}
         if self.path.exists():
             state=json.loads(self.path.read_text())
@@ -39,13 +40,17 @@ class Studio:
         temp.replace(self.path)
         self.scene=scene;self.shapes=shapes;self.schedule=schedule
     def render_frame(self,elapsed,now=None):
-        if not schedule_status(self.schedule,now)["active"]:return bytes(1200)
+        allowed=schedule_status(self.schedule,now)["active"]
+        if self.game:
+            self.game.tick(time.monotonic(),allowed)
+            return self.game.frame() if allowed else bytes(1200)
+        if not allowed:return bytes(1200)
         return render(self.scene,elapsed,self.shapes)
     def metadata(self):
         return [dict(id=s["id"],name=s["name"],frames=len(s["frames"]),durationMs=s["durationMs"],kind=shape_kind(s)) for s in self.shapes.values()]
     def status(self):
         now=time.monotonic()
-        return dict(scene=self.scene,schedule=schedule_status(self.schedule),shapes=self.metadata(),sequence=self.sequence,
+        return dict(game=self.game.status() if self.game else {"active":False},scene=self.scene,schedule=schedule_status(self.schedule),shapes=self.metadata(),sequence=self.sequence,
             devices=[dict(id=k,online=now-v["last"]<5,ageSeconds=round(now-v["last"],1),
                           received=v.get("received",0),framesSent=v.get("framesSent",0),requests=v["requests"]) for k,v in self.devices.items()])
 
@@ -89,18 +94,37 @@ def create_app(directory=None,user=None,password=None,token=None):
     async def health(r):return web.json_response({"ok":True})
     async def index(r):return web.FileResponse(Path(__file__).parent/"static/index.html")
     async def asset(r):
-        if r.match_info["name"] not in ("app.js","style.css"):raise web.HTTPNotFound()
+        if r.match_info["name"] not in ("app.js","games.js","style.css"):raise web.HTTPNotFound()
         return web.FileResponse(Path(__file__).parent/"static"/r.match_info["name"])
     async def state(r):return web.json_response(studio.status())
     async def update(r):
         c=validate_scene(await r.json(),studio.scene)
         if c["mode"]=="custom" and c["shapeId"] not in studio.shapes:raise ValueError("Wybierz zapisany kształt")
-        studio.save(scene=c);studio.epoch=time.monotonic()
+        studio.save(scene=c);studio.epoch=time.monotonic();studio.game=None
         return web.json_response(studio.status())
     async def update_schedule(r):
         config=validate_schedule(await r.json(),studio.schedule)
         studio.save(schedule=config)
         return web.json_response(studio.status())
+    async def game_state(r):
+        return web.json_response(dict(game=studio.game.status() if studio.game else {"active":False},
+                                      schedule=schedule_status(studio.schedule)))
+    async def game_control(r):
+        data=await r.json()
+        if not isinstance(data,dict) or set(data)-{"action","id","kind","value"}:raise ValueError("Niepoprawne sterowanie gry")
+        action=data.get("action")
+        if not isinstance(action,str):raise ValueError("Podaj akcję gry")
+        allowed=schedule_status(studio.schedule)["active"]
+        if action=="start":
+            if not allowed:raise ValueError("Poza godzinami świecenia — zmień harmonogram, aby grać")
+            studio.game=GameSession(data.get("kind"),studio.scene["brightness"])
+        else:
+            if not studio.game or data.get("id")!=studio.game.id:
+                return web.json_response({"error":"Ta gra już się zakończyła lub została zastąpiona"},status=409)
+            if action=="stop":studio.game=None
+            else:studio.game.command(action,data.get("value"),allowed)
+        studio.frame=studio.render_frame(time.monotonic()-studio.epoch)
+        return await game_state(r)
     async def preview(r):return web.Response(body=studio.frame,content_type="application/octet-stream")
     async def save_shape(r):
         shape=validate_shape(await r.json());sid=r.match_info.get("id") or uuid.uuid4().hex
@@ -115,7 +139,7 @@ def create_app(directory=None,user=None,password=None,token=None):
         # and never advances to a different shape.
         c=validate_scene(dict(mode="custom",shapeId=sid,direction="none",enabled=True,
                               blink=False,invert=False,animate=len(shape["frames"])>1),studio.scene)
-        studio.save(scene=c);studio.epoch=time.monotonic()
+        studio.save(scene=c);studio.epoch=time.monotonic();studio.game=None
         return web.json_response(studio.status())
     async def get_shape(r):
         shape=studio.shapes.get(r.match_info["id"])
@@ -177,6 +201,7 @@ def create_app(directory=None,user=None,password=None,token=None):
     app.router.add_get("/static/{name}",asset)
     app.router.add_get("/api/state",state);app.router.add_post("/api/scene",update)
     app.router.add_post("/api/schedule",update_schedule)
+    app.router.add_get("/api/game",game_state);app.router.add_post("/api/game",game_control)
     app.router.add_get("/api/preview",preview)
     app.router.add_post("/api/shapes",save_shape);app.router.add_put("/api/shapes/{id}",save_shape)
     app.router.add_post("/api/shapes/{id}/play",play_shape)

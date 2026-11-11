@@ -27,6 +27,7 @@ Panel i API użytkownika wymagają Basic Auth; endpointy `/api/device/*` wymagaj
 | Metoda / ścieżka | Znaczenie |
 |---|---|
 | GET `/api/state` | Scena, lista kształtów i stan połączeń |
+| GET/POST `/api/game` | Stan i polecenia gry; opis w [GRY.md](GRY.md) |
 | POST `/api/schedule` | Częściowe ustawienia codziennego harmonogramu JSON |
 | POST `/api/scene` | Częściowa konfiguracja sceny JSON |
 | GET `/api/preview` | 1200 bajtów RGB |
@@ -42,6 +43,10 @@ Panel i API użytkownika wymagają Basic Auth; endpointy `/api/device/*` wymagaj
 Kształt ma pola `name` (1–60 znaków), `frames` (1–32 tablice po 1200 liczb 0–255), `durationMs` (50–2000) i `kind` (`image`, `animation`, `slideshow`). `image` musi mieć jedną klatkę. `animate=false` w scenie zatrzymuje wybrany motyw na pierwszej klatce. Edytor WWW udostępnia wybrane czasy z dopuszczalnego zakresu.
 
 Scena i biblioteka są zapisywane atomowo w `/data/studio.json`. Limit biblioteki wynosi 100 kształtów. Pojedyncze żądanie ma limit 1 MiB. Serwer nie rozpoznaje automatycznie fizycznego typu diod.
+
+## Renderowanie gier
+
+`games.py` zawiera niezależne silniki Arkanoid/Tetris i ulotną sesję gry. Aktywna gra zastępuje renderer sceny tylko na czas rozgrywki; nie modyfikuje zapisanego motywu ani biblioteki. Pętla 20 FPS aktualizuje stan i wysyła te same 1200-bajtowe klatki RGB co przy animacjach. Harmonogram nadal ogranicza wyświetlanie. `static/games.js` zapewnia sterowanie, heartbeat oraz automatyczną pauzę. [Szczegóły sesji i protokołu](GRY.md).
 
 ## Harmonogram serwera
 
