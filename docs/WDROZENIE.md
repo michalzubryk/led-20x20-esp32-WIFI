@@ -182,6 +182,8 @@ Obrazy są skalowane do 20×20. Nadajnik stosuje mapowanie `--layout` i `--order
 
 ### OTA bez kabla
 
+Aktualizujesz urządzenie, które przy przerwach w sieci pokazuje lokalny napis? Zobacz [opis zmiany w firmware 2.4](FIRMWARE_2_4.md).
+
 Po pierwszym wgraniu USB otwórz `http://ADRES_ESP/update`, zaloguj się danymi `OTA_USER`/`OTA_PASSWORD` i wyślij **`esp32_led_standalone.ino.bin`** z katalogu `build`. Możesz zrobić to z telefonu. Nie wysyłaj obrazu merged, bootloadera ani tablicy partycji.
 
 Alternatywnie umieść tę binarkę na swoim serwerze jako `remote_app/releases/led400.bin` i w panelu ESP32 wybierz „Aktualizuj z serwera”. Aktualizacja sprawdza nagłówek/chip, a pobranie z serwera także SHA-256. Pozostaw zasilanie do końca operacji; ESP uruchomi się ponownie. Hasła Wi-Fi i token muszą być poprawne w nowej kompilacji. Nie ma automatycznego cofnięcia wadliwego działającego obrazu — odzyskiwanie przez USB.

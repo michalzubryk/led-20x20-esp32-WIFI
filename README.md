@@ -34,6 +34,8 @@ Od firmware **2.4** lampki zachowują ostatnią kompletną klatkę podczas przer
 
 Starszy firmware 2.3 uruchamiał lokalny generator po około 3 sekundach bez danych. Ta zmiana wymaga [aktualizacji ESP32 przez OTA](docs/WDROZENIE.md#ota-bez-kabla), sama aktualizacja Dockera nie wystarcza.
 
+[Dokumentacja firmware 2.4: zachowanie, aktualizacja, diagnostyka i test na urządzeniu](docs/FIRMWARE_2_4.md).
+
 ## Gry na lampkach
 
 W zakładce **🎮 Gry** można uruchomić **Arkanoida** lub **Tetrisa** i grać przyciskami dotykowymi albo klawiaturą. Plansza jest wysyłana na LED-y jako klatki 20×20. Są pauza, jasność gry, wynik, życia oraz automatyczna pauza po utracie sterowania. Zakończenie przywraca poprzednią animację. Wymagany tryb ESP32: **Serwer zdalny**; bez aktualizacji firmware.
