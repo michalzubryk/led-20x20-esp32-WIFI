@@ -158,7 +158,8 @@ void setup() {
   if (!ready || !rmtSetEOT(DATA_PIN,LOW)) {
     ready=false;Serial.println("ERROR RMT INIT");return;
   }
-  memset(pixels,16,20*3);show();
+  // Clear LEDs on boot; no saved frame is available across a restart.
+  memset(pixels,0,sizeof(pixels));show();
   WiFi.persistent(false);WiFi.setHostname("led400");WiFi.mode(WIFI_STA);
   WiFi.setSleep(false);WiFi.setAutoReconnect(true);WiFi.begin(WIFI_SSID,WIFI_PASSWORD);
   setupGenerator();

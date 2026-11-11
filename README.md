@@ -21,12 +21,18 @@ ESP32 ma trzy wybierane źródła obrazu:
 | Tryb | Skąd pochodzi obraz | Czy potrzebny serwer? |
 |---|---|---|
 | Generator w ESP32 | Tekst, licznik, tęcza, pasy, pulsowanie, odbijający się punkt | Nie |
-| Serwer zdalny | Studio WWW, zapisane kształty i animacje | Tak; przy braku danych przez ok. 3 s działa lokalny generator awaryjny |
+| Serwer zdalny | Studio WWW, zapisane kształty i animacje | Tak; przy utracie danych pozostaje ostatnia klatka (firmware 2.4) |
 | Aplikacja USB / DDP | Python, obrazy i GIF-y wysyłane z komputera | Nie |
 
 Lokalny panel pozwala ustawić kierunek (lewo/prawo/góra/dół/bez ruchu), kolor, jasność, miganie, negatyw, skalę tekstu, układ przewodów i kolejność RGB. Konfigurację można zapisać w pamięci ESP32.
 
 Studio zdalne dodaje rysowanie palcem, gumkę, cofanie, gotowe stemple, bibliotekę do 100 kształtów i animacje do 32 klatek. **Play wyświetla tylko wybrany motyw w pętli.** Pokaz różnych obrazków jest osobnym typem. Animację można zatrzymać na pierwszej klatce. Pakiet świąteczny zawiera 10 obrazów, pokaz oraz 4 animacje, np. choinkę z migającymi lampkami.
+
+## Utrata połączenia z serwerem
+
+Od firmware **2.4** lampki zachowują ostatnią kompletną klatkę podczas przerwy w transmisji. Nie przełączają się na zapisany lokalny tekst. Po powrocie danych wyświetlanie wznawia się automatycznie. Po restarcie ESP32 zaczyna od czarnego obrazu do otrzymania pierwszej klatki; obraz nie jest zapisywany do Flash.
+
+Starszy firmware 2.3 uruchamiał lokalny generator po około 3 sekundach bez danych. Ta zmiana wymaga [aktualizacji ESP32 przez OTA](docs/WDROZENIE.md#ota-bez-kabla), sama aktualizacja Dockera nie wystarcza.
 
 ## Gry na lampkach
 
@@ -55,7 +61,7 @@ Możliwe jest przekształcenie AVI/MP4 w klatki RGB 20×20. Zobacz [demonstracj�
 
 W panelu WWW rozwiń **„Godziny świecenia”**, włącz harmonogram i ustaw godzinę włączenia oraz wyłączenia. Domyślna strefa to `Europe/Warsaw`, ze zmianą czasu letniego/zimowego. Przedziały przez północ, np. 18:00–01:00, są obsługiwane.
 
-Harmonogram działa codziennie na serwerze, także po zamknięciu przeglądarki i restarcie aplikacji. Wybierz scenę i naciśnij Play; poza godzinami serwer wysyła czarne klatki. „Zgaś” pozostaje ręcznym wyłączeniem do kolejnego Play. Harmonogram dotyczy trybu **Serwer zdalny z aktywnym połączeniem** — lokalny generator awaryjny i USB/DDP są niezależne.
+Harmonogram działa codziennie na serwerze, także po zamknięciu przeglądarki i restarcie aplikacji. Wybierz scenę i naciśnij Play; poza godzinami serwer wysyła czarne klatki. „Zgaś” pozostaje ręcznym wyłączeniem do kolejnego Play. Harmonogram dotyczy trybu **Serwer zdalny z aktywnym połączeniem** — przy utracie łącza firmware 2.4 zachowuje ostatnią klatkę, a zmiana harmonogramu czeka na powrót transmisji. Tryby lokalny i USB/DDP są niezależne.
 
 ![Godziny świecenia w panelu mobilnym](docs/screenshots/schedule.png)
 

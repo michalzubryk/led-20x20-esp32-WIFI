@@ -8,7 +8,7 @@
 #include "remote_secrets.h"
 #include "remote_ca.h"
 
-static const char FW_VERSION[]="LED400 2.3 stream+OTA 2026-11-07";
+static const char FW_VERSION[]="LED400 2.4 hold-last-frame 2026-11-11";
 static std::atomic<bool> remoteWanted(false),otaRequested(false),otaBusy(false);
 static std::atomic<uint32_t> remoteFrames(0),remoteLastMs(0),rebootAt(0);
 static portMUX_TYPE remoteMux=portMUX_INITIALIZER_UNLOCKED;

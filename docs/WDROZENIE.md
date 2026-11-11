@@ -164,7 +164,7 @@ Na stronie serwera otwórz **Godziny świecenia**. Zaznacz **Włącz codzienny h
 
 Godziny zapisują się w `studio.json` razem z biblioteką i są zachowane po restarcie. Zmiana czasu jest liczona według lokalnego zegara wybranej strefy: jesienna powtórzona godzina jest oceniana dwukrotnie, a pominięta godzina wiosenna nie występuje. Starsze instalacje po aktualizacji mają harmonogram wyłączony.
 
-Ta funkcja działa w trybie **Serwer zdalny** i nie wymaga aktualizacji firmware. ESP32 nadal potrzebuje zasilania i połączenia z serwerem. W razie jego utraty dotychczasowy lokalny generator awaryjny może się uruchomić niezależnie od harmonogramu. Harmonogram wygasza obraz; nie odcina elektrycznie zasilania LED. Tryby lokalny i USB/DDP nie korzystają z godzin serwera.
+Ta funkcja działa w trybie **Serwer zdalny** i nie wymaga aktualizacji firmware. ESP32 nadal potrzebuje zasilania i połączenia z serwerem. W razie utraty połączenia firmware 2.4 zachowuje ostatnią klatkę — również czarną, jeśli lampki już były wygaszone. Jeżeli połączenie zerwie się przed godziną wyłączenia, odebranie wygaszenia będzie możliwe dopiero po powrocie transmisji. Harmonogram wygasza obraz; nie odcina elektrycznie zasilania LED. Tryby lokalny i USB/DDP nie korzystają z godzin serwera.
 
 ### GIF / USB / DDP
 
@@ -196,7 +196,8 @@ Lokalny panel używa HTTP i nie jest przeznaczony do wystawiania w internecie. B
 | Złe kolory / poszarpany obraz | RGB/GRB, kolumny/wiersze/zygzak, jakość sygnału i poziomy logiczne |
 | ESP nie łączy się z Wi-Fi | Sieć 2,4 GHz, hasło i zasięg; adres w DHCP |
 | Serwer offline | Domena, port, zapora, token, pełny łańcuch TLS i synchronizacja czasu |
-| Po chwili wraca lokalny efekt | Zadziałał fallback — sprawdź połączenie i status ESP |
+| Po chwili wraca lokalny efekt | Starszy firmware 2.3 przełączał się po 3 s na generator lokalny; zaktualizuj ESP32 do 2.4 przez OTA |
+| Obraz zatrzymuje się | W firmware 2.4 to zachowanie przy braku klatek; sprawdź połączenie i status ESP |
 | GIF nie zmienia LED | Źródło musi być stream; zamknij monitor szeregowy; sprawdź adres/port |
 | HTTP 401 | Dane Basic Auth panelu lub token urządzenia, zależnie od endpointu |
 | OTA odrzucone | Obraz aplikacji dla klasycznego ESP32, rozmiar partycji, login i hasło |

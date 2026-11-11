@@ -9,7 +9,7 @@
 <p id="scheduleStatus" class="hint" role="status" aria-live="polite">Odczyt harmonogramu…</p>
 <button id="saveSchedule" class="primary full" type="submit">Zapisz harmonogram</button>
 <p class="hint">Codziennie, również przez północ (np. 18:00–01:00). Wybierz obraz i naciśnij Play — poza godzinami będzie czekał na włączenie. „Zgaś” wyłącza ręcznie do kolejnego Play. Zmiana czasu letni/zimowy jest automatyczna.</p>
-<p class="hint">Działa w trybie Serwer zdalny, także po zamknięciu strony. Wymaga połączenia ESP32 z serwerem; lokalny generator awaryjny nie korzysta z tego harmonogramu.</p>
+<p class="hint">Działa w trybie Serwer zdalny, także po zamknięciu strony. Wymaga połączenia ESP32 z serwerem. Firmware 2.4 przy utracie danych zachowuje ostatnią klatkę — zmiana godzin zadziała dopiero po powrocie połączenia.</p>
 </form></details><nav aria-label="Sekcje"><button class="active" data-tab="play">▶ Efekty</button><button data-tab="draw">✎ Rysuj</button><button data-tab="library">▦ Kształty</button><button data-tab="games">🎮 Gry</button></nav>
 <section id="play" class="tab"><h2>Co pokażemy?</h2><div class="effects" id="effects">
 <button data-mode="text" class="selected">Aa<span>Tekst</span></button><button data-mode="counter">123<span>Licznik</span></button><button data-mode="rainbow">🌈<span>Tęcza</span></button><button data-mode="bars">▰<span>Pasy</span></button><button data-mode="pulse">◉<span>Puls</span></button><button data-mode="bounce">▣<span>Kwadrat</span></button></div>

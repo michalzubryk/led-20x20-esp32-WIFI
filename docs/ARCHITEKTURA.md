@@ -54,7 +54,7 @@ Scena i biblioteka są zapisywane atomowo w `/data/studio.json`. Limit bibliotek
 
 Przed renderowaniem każdej klatki serwer ocenia przedział według `zoneinfo`. Poza nim zwraca 1200 zer, zachowując wybraną scenę i połączenie HTTPS. `scene.enabled=false` nadal ma pierwszeństwo. Zmiana sceny nie usuwa godzin, a wyłączenie harmonogramu nie włącza ręcznie wyłączonej sceny. Restart nie wymaga czekania na następne zdarzenie zegarowe: aktualny stan wynika od razu z bieżącej godziny. Czas animacji biegnie również podczas wygaszenia.
 
-Konfiguracja jest zapisywana atomowo ze sceną i biblioteką. Starszy plik bez pola `schedule` otrzymuje ustawienia domyślne z `enabled=false`. Pakiet `tzdata` dostarcza bazę stref, gdy system nie posiada własnej. Firmware nie pobiera reguł godzinowych; w trybie awaryjnym lokalny generator działa niezależnie.
+Konfiguracja jest zapisywana atomowo ze sceną i biblioteką. Starszy plik bez pola `schedule` otrzymuje ustawienia domyślne z `enabled=false`. Pakiet `tzdata` dostarcza bazę stref, gdy system nie posiada własnej. Firmware nie pobiera reguł godzinowych. Od wersji 2.4 utrzymuje ostatnią kompletną klatkę podczas braku transmisji; nie może wtedy odebrać wygaszenia z harmonogramu. Po restarcie zaczyna od czarnego obrazu. Pole `fallback` w lokalnym `/api/remote` zachowano dla zgodności; w 2.4 sygnalizuje oczekiwanie z zatrzymanym obrazem zamiast uruchomienia lokalnego generatora.
 
 ## Protokoły transportowe
 
@@ -85,3 +85,7 @@ Zmiany lokalnego panelu wykonuj w `panel.html`, po czym generuj `page.h`. Wzorce
 ## Ochrona konfiguracji
 
 Repozytorium ignoruje `.env`, prywatne nagłówki, certyfikaty, klucze, katalogi danych i binarki. To nie zastępuje kontroli `git diff --cached` przed publikacją. Nie dodawaj logów z adresami urządzeń, kopii stanu biblioteki ani obrazów firmware zawierających hasła. Token urządzenia i hasło panelu powinny być różnymi losowymi wartościami. OTA nie jest systemem podpisów producenta: aktualizacje udostępnia administrator własnego serwera.
+
+## Weryfikacja firmware 2.4
+
+Firmware 2.4 skompilowano dla Arduino ESP32 3.2.1 i wgrano przez OTA. W teście na fizycznym ESP32 wstrzymano serwer na 9 sekund: po przekroczeniu progu 3 sekund podgląd RGB pozostał identyczny w kolejnych odczytach, bez uruchomienia generatora lokalnego. Po wznowieniu serwera połączenie wróciło automatycznie, licznik odebranych klatek rósł, a konfiguracja ESP32 pozostała niezmieniona. Test nie wymagał zmiany zapisanej sceny.

@@ -63,7 +63,7 @@ Siedem rodzajów klocków jest losowanych w paczkach po siedem. Obrót próbuje 
 - Jedna instancja studia obsługuje **jedną wspólną grę**. Inni zalogowani użytkownicy mogą nią sterować lub rozpocząć nową. Wszystkie ESP32 połączone z tą instancją pokazują ten sam obraz.
 - Stan gry i wynik są tylko w RAM. Restart serwera kończy rozgrywkę i przywraca zapisaną scenę. Nie ma trwałych rekordów ani zapisu rozgrywki.
 - Wybranie innego efektu lub Play w bibliotece kończy grę. Ręczne „Zgaś” w zwykłym panelu również kończy grę i wyłącza scenę.
-- Podczas awarii połączenia ESP32–serwer firmware może uruchomić lokalny efekt awaryjny. Gra nie działa wtedy na LED-ach; dostępna pozostaje na serwerze do czasu pauzy lub zakończenia.
+- Podczas awarii połączenia ESP32–serwer firmware 2.4 zachowuje ostatnią klatkę. Obraz gry na LED-ach zastyga; serwer może nadal liczyć rozgrywkę, jeśli telefon pozostaje połączony. W takiej sytuacji wstrzymaj grę. Po powrocie danych obraz aktualizuje się automatycznie.
 - Odbiór jest oparty na istniejącym strumieniu około 20 FPS. Opóźnienia Wi-Fi i internetu wpływają na reakcję — to proste gry rekreacyjne, nie system gwarantujący stałą latencję.
 
 ## Podgląd mobilny

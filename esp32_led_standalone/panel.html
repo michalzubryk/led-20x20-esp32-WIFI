@@ -10,8 +10,8 @@
 <select id="source"><option value="local">Generator w ESP32</option><option value="server">Serwer zdalny</option><option value="stream">Aplikacja USB / DDP w sieci lokalnej</option></select>
 <p id="remoteInfo">Łączenie ze statusem urządzenia…</p>
 <a style="color:#6ce5b5" id="serverLink" href="#" target="_blank" rel="noopener">Otwórz pilot i edytor na serwerze ↗</a>
-<p><small>W trybie serwera obraz pochodzi ze zdalnej aplikacji. Po 3 s bez danych wraca poniższa animacja lokalna; ESP32 ponawia połączenie.</small></p>
-<label for="mode">Animacja lokalna / awaryjna</label><select id="mode"><option value="text">Tekst lub liczba</option><option value="counter">Licznik +1 co sekundę</option><option value="rainbow">Tęcza</option><option value="bars">Wędrujące pasy</option><option value="pulse">Pulsujący kolor</option><option value="bounce">Odbijający się kwadrat</option></select>
+<p><small>W trybie serwera obraz pochodzi ze zdalnej aplikacji. Przy braku danych pozostaje ostatnia klatka; ESP32 ponawia połączenie. Po restarcie czeka z wygaszonymi lampkami na pierwszy obraz.</small></p>
+<label for="mode">Animacja lokalna</label><select id="mode"><option value="text">Tekst lub liczba</option><option value="counter">Licznik +1 co sekundę</option><option value="rainbow">Tęcza</option><option value="bars">Wędrujące pasy</option><option value="pulse">Pulsujący kolor</option><option value="bounce">Odbijający się kwadrat</option></select>
 <div id="textBox"><label for="text">Tekst / liczba</label><input id="text" maxlength="100" value="HELLO 123"></div>
 <div id="counterBox" hidden><label for="start">Licz od</label><input id="start" type="number" min="0" max="999999" value="0"></div>
 <div class="row"><div><label for="direction">Ruch</label><select id="direction"><option value="left">← W lewo</option><option value="right">W prawo →</option><option value="up">↑ W górę</option><option value="down">↓ W dół</option><option value="none">Bez ruchu</option></select></div><div id="scaleBox"><label for="scale">Litery</label><select id="scale"><option value="1">Małe · 10 px</option><option value="2">Duże · 20 px</option></select></div></div>
@@ -50,7 +50,7 @@ async function poll(){
 async function init(){try{const r=await fetch('/api/config');if(!r.ok)throw Error();const c=await r.json();for(const k of keys){if(['blink','invert'].includes(k))$(k).checked=c[k];else $(k).value=c[k];}ready=true;visibility();$('message').textContent=c.enabled?(c.source==='server'?'● Tryb serwera':c.source==='stream'?'● Odbiór USB / DDP':'● Generator działa'):'○ Generator wyłączony';poll();}catch(e){$('message').textContent='Nie udało się połączyć. Odśwież stronę.';}}
 async function remotePoll(){
  try{const r=await fetch('/api/remote',{signal:AbortSignal.timeout(4000)});const s=await r.json();
- $('remoteInfo').textContent=s.source==='server'?(s.connected?'● Połączono z serwerem · odebrano '+s.frames+' klatek':s.message+(s.fallback?' · animacja awaryjna':'')):s.source==='stream'?'Czekam na klatki USB / DDP':'Generator działa w ESP32';
+ $('remoteInfo').textContent=s.source==='server'?(s.connected?'● Połączono z serwerem · odebrano '+s.frames+' klatek':s.message+(s.fallback?' · zachowuję ostatnią klatkę':'')):s.source==='stream'?'Czekam na klatki USB / DDP':'Generator działa w ESP32';
  $('serverLink').href=s.host+'/';$('otaStatus').textContent=s.ota;$('stats').textContent=s.version;
  }catch(e){$('remoteInfo').textContent='Nie udało się odczytać statusu ESP32';}
  setTimeout(remotePoll,2000);

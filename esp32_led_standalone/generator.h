@@ -198,8 +198,11 @@ void generatorLoop() {
   if(otaBusy.load())return;
   fallbackActive=false;
   if(cfg.source=="server" && cfg.enabled) {
-    if(remoteLastMs.load() && now-remoteLastMs.load()<3000) {consumeRemoteFrame();return;}
-    fallbackActive=true;
+    // A stalled remote stream must never switch to the saved local effect.
+    // Keep the last complete frame (black until the first frame after boot).
+    consumeRemoteFrame();
+    fallbackActive=!(remoteLastMs.load() && now-remoteLastMs.load()<3000);
+    return;
   }
   if(cfg.enabled && cfg.source!="stream" && now-lastGenerated>=33) {lastGenerated=now;generateFrame(now);}
 }
