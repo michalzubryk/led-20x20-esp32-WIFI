@@ -34,6 +34,13 @@ W zakładce **🎮 Gry** można uruchomić **Arkanoida** lub **Tetrisa** i grać
 
 [Instrukcja, sterowanie, zrzuty ekranu i ograniczenia](docs/GRY.md). Gra jest wspólna dla danej instancji serwera, respektuje harmonogram i nie zapisuje rozgrywki po restarcie.
 
+**Działanie gier na fizycznej matrycy LED zostało potwierdzone przez użytkownika.** Poniżej podglądy interfejsu mobilnego z instalacji demonstracyjnej:
+
+| Arkanoid — paletka i cegiełki | Tetris — spadające klocki |
+|---|---|
+| ![Mobilne sterowanie Arkanoidem](docs/screenshots/arkanoid.png) | ![Mobilne sterowanie Tetrisem](docs/screenshots/tetris.png) |
+
+
 ## Halloween
 
 Pakiet zawiera **7 obrazów i 3 animacje**: dynię, ducha, nietoperza, czaszkę, pająka, pajęczynę i świeczkę, a także świecącą dynię, lewitującego ducha oraz świeczkę z migoczącym płomieniem. Po imporcie wybierz **Moje kształty → Halloween** lub **Animowane**.

@@ -4,6 +4,24 @@ W studiu WWW jest zakładka **🎮 Gry** z dwiema prostymi grami: **Arkanoid** (
 
 Logika działa na serwerze Docker. ESP32 otrzymuje zwykłe klatki RGB przez dotychczasowy strumień HTTPS — nie wymaga aktualizacji firmware. Telefon jest kontrolerem, a lampki ekranem. Można też ćwiczyć wyłącznie na podglądzie przeglądarki bez połączonego ESP32.
 
+## Jak ekran współpracuje z kontrolerem
+
+```mermaid
+flowchart LR
+    Phone["Telefon lub komputer<br/>dotyk / klawiatura"] -->|"HTTPS · polecenia gry"| Server["Docker<br/>logika, kolizje, wynik"]
+    Server -->|"Strumień RGB 20×20<br/>w połączeniu otwartym przez ESP32"| ESP["ESP32 · Wi-Fi"]
+    ESP -->|"GPIO18 DATA + wspólne GND"| LEDs["400 LED<br/>ekran gry"]
+    Server -->|"Podgląd i wynik"| Phone
+```
+
+Serwer oblicza ruch, odbicia piłki i ułożenie klocków. ESP32 wyświetla gotowy obraz; nie uruchamia silnika gry. Lampki zachowują własne zasilanie, zgodnie ze [schematem podłączenia](WDROZENIE.md#połączenia--zasilanie-z-usb-lampek).
+
+## Potwierdzenie działania
+
+11 listopada 2026 użytkownik potwierdził działanie funkcji gier na fizycznej matrycy LED. To potwierdzenie użytkowe, a nie pomiar opóźnienia ani deklaracja zgodności ze wszystkimi typami lampek.
+
+Przed wdrożeniem przeszło **26 testów automatycznych backendu** oraz test mobilnej przeglądarki obejmujący dotyk, klawiaturę, wystrzelenie piłki, pauzę, wznowienie, zrzut klocka i powrót do wcześniejszej sceny. Zrzuty poniżej pochodzą z osobnej instalacji demonstracyjnej; dlatego pokazują „ESP32 offline” i nie zawierają danych prywatnego serwera.
+
 ## Uruchomienie
 
 1. Ustaw na ESP32 źródło **Serwer zdalny** i sprawdź status online w studiu.
@@ -55,6 +73,20 @@ Zrzuty z lokalnego serwera demonstracyjnego bez fizycznego ESP32:
 | Arkanoid | Tetris |
 |---|---|
 | ![Arkanoid](screenshots/arkanoid.png) | ![Tetris](screenshots/tetris.png) |
+
+## Najczęstsze pytania
+
+| Objaw / pytanie | Rozwiązanie |
+|---|---|
+| Nie widzę zakładki Gry | Zaktualizuj aplikację Docker i odśwież stronę; firmware ESP32 nie wymaga zmiany. |
+| Podgląd działa, ale lampki pokazują inny efekt | Sprawdź, czy ESP32 jest online i ma źródło Serwer zdalny. |
+| Nie mogę rozpocząć lub wznowić gry | Sprawdź godziny harmonogramu; poza przedziałem świecenia gry są blokowane. |
+| Piłka stoi na paletce | Naciśnij Wystrzel piłkę lub spację, także po stracie życia. |
+| Klawiatura nie reaguje | Kliknij planszę, aby przenieść fokus z pola formularza lub przycisku; zakładka Gry musi być aktywna. |
+| Gra sama się zatrzymała | Sprawdź połączenie telefonu i harmonogram; po powrocie użyj Wznów. |
+| Kierunki na lampkach są zamienione / obraz jest zygzakiem | Dopasuj układ wierszy, kolumn i zygzaka w lokalnym panelu ESP32. |
+| Jak wrócić do dekoracji? | Wybierz Zakończ · wróć do animacji. Przywracany jest także wcześniejszy stan wyłączenia. |
+| Czy wynik przetrwa restart Dockera? | Nie. Rozgrywka i wynik są przechowywane tylko w pamięci serwera. |
 
 ## API i testowanie
 
